@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import DynamicBackground from '../src/DynamicBackground';
 
 const ExampleApp = () => (
-  <div id='app'>
+  <div id={'app'}>
     <h1>dynamic-background example app</h1>
     <DynamicValuesForm />
   </div>
@@ -14,7 +14,7 @@ class DynamicValuesForm extends React.Component {
     super();
     this.state = {
       stringValue: '',
-      harmonyValue: undefined
+      harmonyValue: undefined,
     };
 
     this.handleTextInputChange = (e) => {
@@ -24,13 +24,13 @@ class DynamicValuesForm extends React.Component {
     this.handleOptionInputChange = (e) => {
       this.setState({ harmonyValue: e.target.value });
     };
-  };
+  }
 
   render() {
     return (
       <div>
         <form>
-          <input type='text' onChange={this.handleTextInputChange} />
+          <input type={'text'} onChange={this.handleTextInputChange} />
           <select>
             <option value="complimentary">Complimentary</option>
             <option value="split-complimentary">Split-Complimentary</option>
@@ -42,8 +42,8 @@ class DynamicValuesForm extends React.Component {
         <DynamicBackground string={this.state.stringValue} />
       </div>
     );
-  };
-};
+  }
+}
 
 ReactDOM.render(<ExampleApp />, document.getElementById('root'));
 
