@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import stringToColors from '../../stringToColors';
+import { stringToColors, harmonies } from '../../stringToColors';
 
 const oneColorTempl = color => color;
 
@@ -12,7 +12,8 @@ const threeColorTempl = (color1, color2, color3) =>
 const fourColorTempl = (color1, color2, color3, color4) =>
   `linear-gradient(left top, ${color1} 10%, ${color2} 33%, ${color3} 50%, ${color4} 100%)`;
 
-const getValuesForString = str => stringToColors(str);
+const getValuesForString = (str, harmonyFunc) =>
+  stringToColors(str, harmonyFunc);
 
 const convertValues = (colorVals) => {
   switch (colorVals.length) {
@@ -24,8 +25,20 @@ const convertValues = (colorVals) => {
   }
 };
 
-const getBackground = (str) => {
-  const values = getValuesForString(str);
+const mapPropToHarmony = (harmStr) => {
+  switch (harmStr) {
+    case 'triadic': return harmonies.triadic;
+    case 'tetradic': return harmonies.tetradic;
+    case 'analagous': return harmonies.analagous;
+    case 'splitComplimentary': return harmonies.splitComplimentary;
+    case 'complimentary': return harmonies.complimentary;
+    default: return harmonies.tetradic;
+  }
+};
+
+const getBackground = (str, harmony) => {
+  const harmonyFunc = mapPropToHarmony(harmony);
+  const values = getValuesForString(str, harmonyFunc);
 
   return convertValues(values);
 };
@@ -33,7 +46,7 @@ const getBackground = (str) => {
 const DynamicBackground = styled.div`
   height: 100px;
   width: 100px;
-  background: ${props => getBackground(props.string)}
+  background: ${props => getBackground(props.string, props.harmony)}
 `;
 
 export default DynamicBackground;
