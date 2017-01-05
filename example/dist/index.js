@@ -29818,9 +29818,12 @@
 	const HSL_RGB = __webpack_require__(259);
 	const RGB_hex = __webpack_require__(260);
 
+	function hueToHSL(newHue, baseHue) {
+	  return new HSL(newHue, baseHue.sat, baseHue.light);
+	}
 
-	//@@param string => a string to generate gradient for
-	//@@param harmony => optional argument for which color harmony to use to generate
+	// @@param string => a string to generate gradient for
+	// @@param harmony => optional argument for which color harmony to use to generate
 	// color set
 	function stringToColors(str, harmony) {
 	  const hash = javaHash(str);
@@ -29834,22 +29837,19 @@
 	    .map(hsl => HSL_RGB(hsl))
 	    .map(rgb => RGB_hex(rgb));
 
-	    return harmonicHexes;
-	};
-
-	function hueToHSL(newHue, baseHue) {
-	  return new HSL(newHue, baseHue.sat, baseHue.light);
+	  return harmonicHexes;
 	}
 
+
 	module.exports = {
-	  stringToColors: stringToColors,
+	  stringToColors,
 	  harmonies: {
-	    triadic: triadic,
-	    tetradic: tetradic,
-	    complimentary: complimentary,
-	    splitComplimentary: splitComplimentary,
-	    analagous: analagous
-	  }
+	    triadic,
+	    tetradic,
+	    complimentary,
+	    splitComplimentary,
+	    analagous,
+	  },
 	};
 
 
@@ -29859,14 +29859,16 @@
 
 	const RGB = __webpack_require__(250);
 
+	/* eslint-disable no-bitwise */
 	function int_RGB(int) {
 	  const blue = int & 255;
 	  const green = (int >> 8) & 255;
 	  const red = (int >> 16) & 255;
 
 	  return new RGB(red, green, blue);
-	};
+	}
 
+	/* eslint-enable no-bitwise */
 	module.exports = int_RGB;
 
 
@@ -29875,10 +29877,10 @@
 /***/ function(module, exports) {
 
 	function RGB(red, green, blue) {
-	    this.red = red;
-	    this.blue = blue;
-	    this.green = green;
-	};
+	  this.red = red;
+	  this.blue = blue;
+	  this.green = green;
+	}
 
 	module.exports = RGB;
 
@@ -29887,20 +29889,22 @@
 /* 251 */
 /***/ function(module, exports) {
 
+	/* eslint-disable no-bitwise */
 	function javaHash(string) {
 	  let hash = 0;
 
 	  if (string.length === 0) return hash;
 
-	  for (i = 0; i < string.length; i++) {
-	    let char = string.charCodeAt(i);
+	  for (let i = 0; i < string.length; i += 1) {
+	    const char = string.charCodeAt(i);
 	    hash = ((hash << 5) - hash) + char;
-	    hash = hash & hash;
+	    hash &= hash;
 	  }
 
 	  return hash;
-	};
+	}
 
+	/* eslint-enable no-bitwise */
 	module.exports = javaHash;
 
 
@@ -29909,10 +29913,10 @@
 /***/ function(module, exports) {
 
 	function HSL(hue, sat, light) {
-	  this.hue = hue,
-	  this.sat = sat,
-	  this.light = light
-	};
+	  this.hue = hue;
+	  this.sat = sat;
+	  this.light = light;
+	}
 
 	module.exports = HSL;
 
@@ -29924,20 +29928,20 @@
 	const HSL = __webpack_require__(252);
 
 	function RGB_HSL(rgb) {
-	  //Convert ranges 0..255 to 0..1
-	  const r = rgb.red / 255;   //233 = .9137
-	  const g = rgb.green / 255; //24 = .8235
-	  const b = rgb.blue / 255;  //210 = .0941
+	  // Convert ranges 0..255 to 0..1
+	  const r = rgb.red / 255;
+	  const g = rgb.green / 255;
+	  const b = rgb.blue / 255;
 
 	  const cMAX = Math.max(r, g, b); // .9137
 	  const cMIN = Math.min(r, g, b); // .0941
 
 	  const delta = cMAX - cMIN; // .8196
 
-	  let hsl = new HSL();
+	  const hsl = new HSL();
 
 	  let hue = 0;
-	  //calculate hue
+	  // Calculate hue
 	  if (delta === 0) {
 	    hue = 0;
 	  } else if (cMAX === r) {
@@ -29947,30 +29951,30 @@
 	  } else if (cMAX === b) {
 	    hue = ((r - g) / delta) + 4;
 	  } else {
-	      throw new Error('Unable to calculate Hue');
+	    throw new Error('Unable to calculate Hue');
 	  }
 
-	  hue = hue * 60;
+	  hue *= 60;
 
 	  if (hue > 0) {
 	    hsl.hue = hue;
 	  } else {
 	    hsl.hue = hue + 360;
 	  }
-	  //calculate lightness
+	  // Calculate lightness
 	  hsl.light = (cMAX + cMIN) / 2;
 
-	  //calculate saturation;
+	  // Calculate saturation;
 	  if (delta === 0) {
 	    hsl.sat = 0;
-	  } else if (hsl.light > 0.5 ){
-	    hsl.sat = delta / ( 2 - (cMAX + cMIN) );
+	  } else if (hsl.light > 0.5) {
+	    hsl.sat = delta / (2 - (cMAX + cMIN));
 	  } else {
 	    hsl.sat = delta / (cMAX + cMIN);
 	  }
 
 	  return hsl;
-	};
+	}
 
 	module.exports = RGB_HSL;
 
@@ -29985,7 +29989,7 @@
 	  const z = (y + 120) % 360;
 
 	  return [x, y, z];
-	};
+	}
 
 	module.exports = triadic;
 
@@ -29999,7 +30003,7 @@
 	  const compliment = (base + 180) % 360;
 
 	  return [base, compliment];
-	};
+	}
 
 	module.exports = complimentary;
 
@@ -30014,7 +30018,7 @@
 	  const z = (y + 60) % 360;
 
 	  return [x, y, z];
-	};
+	}
 
 	module.exports = splitComplimentary;
 
@@ -30030,7 +30034,7 @@
 	  const d = (c + 90) % 360;
 
 	  return [a, b, c, d];
-	};
+	}
 
 	module.exports = tetradic;
 
@@ -30044,8 +30048,8 @@
 	  const a = ((b - 30) + 360) % 360;
 	  const c = (b + 30) % 360;
 
-	  return [ a, b, c ];
-	};
+	  return [a, b, c];
+	}
 
 	module.exports = analagous;
 
@@ -30061,34 +30065,34 @@
 	  const light = hsl.light;
 	  const sat = hsl.sat;
 
-	  const C = ( 1 - Math.abs((2 * light) - 1) ) * sat;
-	  const X = C * ( 1 - Math.abs( (hue / 60 ) % 2 - 1));
-	  const m = light - ( C / 2 );
+	  const C = (1 - Math.abs((2 * light) - 1)) * sat;
+	  const X = (C * (1 - Math.abs(((hue / 60) % 2) - 1)));
+	  const m = light - (C / 2);
 
-	  let rgbP = [ 0, 0, 0 ];
+	  let rgbP = [0, 0, 0];
 
 	  if (hue >= 0 && hue < 60) {
-	      rgbP = [ C, X, 0 ];
+	    rgbP = [C, X, 0];
 	  } else if (hue >= 60 && hue < 120) {
-	      rgbP = [ X, C, 0 ];
+	    rgbP = [X, C, 0];
 	  } else if (hue >= 120 && hue < 180) {
-	      rgbP = [ 0, C, X ];
+	    rgbP = [0, C, X];
 	  } else if (hue >= 120 && hue < 180) {
-	      rgbP = [ 0, C, X ];
+	    rgbP = [0, C, X];
 	  } else if (hue >= 180 && hue < 240) {
-	      rgbP = [ 0, C, X ];
+	    rgbP = [0, X, C];
 	  } else if (hue >= 240 && hue < 300) {
-	      rgbP = [ X, 0, C ];
+	    rgbP = [X, 0, C];
 	  } else if (hue >= 300 && hue < 360) {
-	      rgbP = [ C, 0, X ];
+	    rgbP = [C, 0, X];
 	  }
 
 	  const r = Math.floor((rgbP[0] + m) * 255);
 	  const g = Math.floor((rgbP[1] + m) * 255);
 	  const b = Math.floor((rgbP[2] + m) * 255);
 
-	  return new RGB(r, g, b);;
-	};
+	  return new RGB(r, g, b);
+	}
 
 	module.exports = HSL_RGB;
 
@@ -30097,18 +30101,19 @@
 /* 260 */
 /***/ function(module, exports) {
 
+	function intToHex(int) {
+	  const hex = int.toString(16);
+	  return (hex.length === 1) ? `0${hex}` : hex;
+	}
+
 	function RGB_hex(rgb) {
 	  const r = intToHex(rgb.red);
 	  const g = intToHex(rgb.green);
 	  const b = intToHex(rgb.blue);
 
-	  return "#" + r + g + b;
-	};
+	  return `#${r}${g}${b}`;
+	}
 
-	function intToHex(int) {
-	  const hex = int.toString(16);
-	  return (hex.length ===1) ? "0" + hex : hex;
-	};
 
 	module.exports = RGB_hex;
 
