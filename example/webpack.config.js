@@ -9,7 +9,7 @@ module.exports = {
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
-        exclude: [/node_modules/, /stringToColors/],
+        exclude: [/node_modules/, /string-to-colors/],
         query: {
           presets: ['es2015', 'react'],
         },
