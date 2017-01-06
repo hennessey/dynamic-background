@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { stringToColors, harmonies } from '../../string-to-colors';
+import { stringToColors, harmonies } from 'string-to-colors';
 
 const oneColorTempl = color => color;
 

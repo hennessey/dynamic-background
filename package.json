@@ -21,6 +21,12 @@
   },
   "author": "jghennes@gmail.com",
   "license": "ISC",
+  "dependencies": {
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "string-to-colors": "github:hennessey/string-to-colors",
+    "styled-components": "^1.2.1"
+  },
   "devDependencies": {
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
@@ -32,10 +38,5 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.8.0",
     "webpack": "^1.14.0"
-  },
-  "dependencies": {
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
-    "styled-components": "^1.2.1"
   }
 }
